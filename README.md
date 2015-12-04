@@ -1,0 +1,2 @@
+# spellcheck
+check projects spell
