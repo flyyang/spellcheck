@@ -65,11 +65,13 @@ var walk = function(dir,type,done) {
 
 walk(directory, type, function(err, results) {
     if (err) throw err;
+    //console.log(results);
 });
 
 function spellcheck(file,data){
-    var matches = /(\/\/.+\n)|(\/\*[\s\S]+?\*\/)/.exec(data);
-    //console.log(matches);
+    var matches = data.match(/(\/\/.*?\n)|(\/\*[\s\S]+?\*\/)/g);
+    //var matches = /(?:\/\*(?:[\s\S]*?)\*\/)|(?:([\s;])+\/\/(?:.*)$)/gm.exec(data);
+    //var matches = /(\/\*[\w\'\s\r\n\*]*\*\/)|(\/\/[\w\s\']*)|(\<![\-\-\s\w\>\/]*\>)/g.exec(data);
     if(matches && matches.length > 0){
         var ml = matches.length;
         for (var i=0 ; i < ml;i++) {
@@ -85,11 +87,9 @@ function spellcheck(file,data){
                   var item = comment[j];
                   if(/^[a-zA-Z]+$/.test(item)){
                     var litem = item.toLowerCase();
-                    // not over two cap letters, or leading with capital letter
-                    if(!/[A-Z]+.*[A-Z]+.*/.test(item) && /[^A-Z]/.test(item) &&!dict[litem]){
-                      if(program.file){
-                        console.log(file);
-                      }
+                    // ignore A-Z 
+                    if( !/[A-Z]/.test(item) &&!dict[litem] && !dict[litem+'s']){
+                      console.log(file);
                       console.log(item);
                     }
                     // 
