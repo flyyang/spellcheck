@@ -1,0 +1,26 @@
+{
+  "name": "spellcheck",
+  "version": "1.0.0",
+  "description": "check file's spelling",
+  "main": "spellchek.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flyyang/spellcheck.git"
+  },
+  "keywords": [
+    "spellcheck"
+  ],
+  "author": "flyyang",
+  "license": "MIT",
+  "preferGlobal":true,
+  "bugs": {
+    "url": "https://github.com/flyyang/spellcheck/issues"
+  },
+  "bin":{
+    "spellcheck":"spellcheck.js"
+  },
+  "homepage": "https://github.com/flyyang/spellcheck#readme"
+}
