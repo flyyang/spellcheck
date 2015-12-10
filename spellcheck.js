@@ -69,32 +69,59 @@ walk(directory, type, function(err, results) {
 });
 
 function spellcheck(file,data){
+    console.log(file);
+    stringcheck(data);
+    commentCheck(data)
+}
+function stringcheck(data){
+    var matches = data.match(/(?:\"(.+?)\")|(?:\'(.+?)\')/g);
+    stringRule(matches);
+}
+function commentCheck(data){
     var matches = data.match(/(\/\/.*?\n)|(\/\*[\s\S]+?\*\/)/g);
-    //var matches = /(?:\/\*(?:[\s\S]*?)\*\/)|(?:([\s;])+\/\/(?:.*)$)/gm.exec(data);
-    //var matches = /(\/\*[\w\'\s\r\n\*]*\*\/)|(\/\/[\w\s\']*)|(\<![\-\-\s\w\>\/]*\>)/g.exec(data);
-    if(matches && matches.length > 0){
-        var ml = matches.length;
-        for (var i=0 ; i < ml;i++) {
-            if(!matches[i]) return;
-            var comment = matches[i].replace('\n','').split(/\s+/);
-            //console.log(comment);
-           
-            if(comment && comment.length > 0){
-                var cl = comment.length; 
-                //console.log(cl);
-                for(var j=0;j < cl;j++){
-                  //console.log(comment[j]);
-                  var item = comment[j];
-                  if(/^[a-zA-Z]+$/.test(item)){
-                    var litem = item.toLowerCase();
-                    // ignore A-Z 
-                    if( !/[A-Z]/.test(item) &&!dict[litem] && !dict[litem+'s']){
-                      console.log(file);
-                      console.log(item);
-                    }
-                    // 
-                  }
+    rule(matches);
+}
+function stringRule(matches){
+    if(!Array.isArray(matches)) return;
+    var ml = matches.length;
+    for(var i=0;i < ml;i++){
+        var item = matches[i];
+        item = item.split(/\s+/);
+        var il = item.length;
+        for(var j=0;j<il;j++){
+            var word = item[j];
+            word = word.replace(/\'|\"/g,'');
+            word = word.replace(/[^a-zA-Z0-9]{1}?$/,'');
+            //Star star stars
+            word = word.toLowerCase();
+            if(item[j].match(/(?:^[a-z]+$)|(?:^[A-Z][a-z]+$)/) &&  !dict[word] && !dict[word+'s']){                
+              console.log(item[j]);
+            }
+        }
+    }
+}
+function rule(matches){
+    if(!Array.isArray(matches)) return;
+    var ml = matches.length;
+    for (var i=0 ; i < ml;i++) {
+        if(!matches[i]) return;
+        var comment = matches[i].replace('\n','').split(/\s+/);
+        //console.log(comment);
+       
+        if(comment && comment.length > 0){
+            var cl = comment.length; 
+            //console.log(cl);
+            for(var j=0;j < cl;j++){
+              //console.log(comment[j]);
+              var item = comment[j];
+              if(/^[a-zA-Z]+$/.test(item)){
+                var litem = item.toLowerCase();
+                // ignore A-Z 
+                if( !/[A-Z]/.test(item) &&!dict[litem] && !dict[litem+'s']){
+                  console.log(item);
                 }
+                // 
+              }
             }
         }
     }
